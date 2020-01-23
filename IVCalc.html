@@ -320,7 +320,7 @@ function calculate() {
             spreadsUsed = Object.values(spreadPossibilities.noDK)
             
     }
-    
+    // console.log(spreadsUsed)
     for ( let i=0; i<spreadsUsed.length; i++ ) {
         spreadNumerator = 1;
         spreadDenominator = spreadsUsed.length; // Amount of spreads that have a chance of generating desired outcome
@@ -331,29 +331,29 @@ function calculate() {
 
                 let parentItem = i < 10 ? parent1.item : parent2.item
                 let parent = i < 10 ? parent1 : parent2
-                
-                if( parent1.item !== parent2.item  && bothUsingPI && spreadsUsed[i][j] === parentItem ) { // if BOTH parents have different PIs
+
+                if ( parent1.item === parent2.item && parent1.stats[parent1.item] !== parent2.stats[parent2.item] && ( parent1.item === desiredOutcome[spreadsUsed[i][j]] || parent2.item === desiredOutcome[spreadsUsed[i][j]]  ) && bothUsingPI ) { // if BOTH parents are holding the same PI but have different stats
                     
-                    if( parentItem === spreadsUsed[i][j] && parent.stats[parentItem] ) {
+                    spreadNumerator   *= 1;
+                    spreadDenominator *= 2;
+                
+                } else if( parent1.item !== parent2.item && parentItem === spreadsUsed[i][j] && bothUsingPI ) { // if BOTH parents have different PIs
+                    
+                    if ( parent.stats[parentItem] ) {
                         
                         spreadNumerator   *= 1;
                         spreadDenominator *= 1;
 
-                    } else if ( parentItem === spreadsUsed[i][j] && !parent.stats[parentItem] ) {
+                    } else {
                         
                         spreadNumerator   *= 0;
                         spreadDenominator *= 1;
 
                     } 
                 
-                } else if ( ( spreadsUsed[i][j] === parent1.item || spreadsUsed[i][j] === parent2.item ) && !bothUsingPI ) {
-
-                    if( parent1.item === parent2.item && parent1.stats[parent1.item] !== parent2.stats[parent2.item] ) { // if BOTH parents are holding the same PI but have different stats
-                        
-                        spreadNumerator   *= 1;
-                        spreadDenominator *= 2;
-
-                    } else if ( desiredOutcome[spreadsUsed[i][j]] === parent1.stats[parent1.item] || desiredOutcome[spreadsUsed[i][j]] === parent2.stats[parent2.item] ) {
+                } else if ( ( spreadsUsed[i][j] === parent1.item || spreadsUsed[i][j] === parent2.item ) && !bothUsingPI ) { // ONLY ONE parent has a PI
+                    
+                    if ( desiredOutcome[spreadsUsed[i][j]] === parent1.stats[parent1.item] || desiredOutcome[spreadsUsed[i][j]] === parent2.stats[parent2.item] ) {
                         
                         spreadNumerator   *= 1;
                         spreadDenominator *= 1;
@@ -365,18 +365,20 @@ function calculate() {
                     }
 
                 } else if ( parent1.stats[spreadsUsed[i][j]] && parent2.stats[spreadsUsed[i][j]] ) {
-
+                    
                     spreadNumerator   *= 1;
                     spreadDenominator *= 1;
 
                 } else if ( parent1.stats[spreadsUsed[i][j]] || parent2.stats[spreadsUsed[i][j]] ) {
-
+                    
                     spreadNumerator   *= 1;
                     spreadDenominator *= 2;
 
                 } else {
+                    
                     spreadNumerator   *= 0;
                     spreadDenominator *= 1;
+
                 }
 
             }
@@ -393,7 +395,7 @@ function calculate() {
         }
 
         chanceofDesiredOutcome += (100/spreadDenominator)*spreadNumerator
-
+        
     }
 
     if ( document.getElementById("gender-chance").value !== "" )
