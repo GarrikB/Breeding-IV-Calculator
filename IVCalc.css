@@ -1,0 +1,67 @@
+body {
+    font: 14px "Century Gothic", Futura, sans-serif;
+    margin: 20px;
+    padding: 0px;
+    margin: 0px;
+}
+
+#root {
+    margin: 10px;
+}
+
+#root > div {
+    /* display: inline-block; */
+    margin: 5px;
+}
+
+#stats-div {
+    width: 605px;
+}
+
+#root #result {
+    margin: 5px 0px 10px 0px;
+}
+
+#details-div {
+    max-width: 900px;
+}
+
+#details-div h3{
+    margin: 5px 0px;
+}
+
+.stats-table tbody tr {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.stats-table tbody tr th {
+    width: 60px;
+}
+
+.stat-checkbox {
+    -webkit-appearance:none;
+    width:30px;
+    height:30px;
+    background:white;
+    border-radius:5px;
+    border:2px solid #555;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+
+.stat-checkbox:checked {
+    background: #abe;
+}
+
+.modifiers {
+    display: inline-block;
+}
+
+#button {
+    box-sizing: border-box;
+    margin: 10px;
+    width: 150px;
+    height: 30px;
+    font-size: 15px;
+}
