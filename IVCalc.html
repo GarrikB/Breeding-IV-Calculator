@@ -296,10 +296,9 @@ function calculate() {
 
     let chanceofDesiredOutcome = 0; // Total percentage chance of desired outcome
 
-    let spreadNumerator = 1;
-    let spreadDenominator = 1;
-
     let spreadsUsed = [];
+
+    let decimalChance = 1
 
     if ( usingDK && parentsTotalIVs + 1 < numberofDesiredIVs || !usingDK && parentsTotalIVs + 3 < numberofDesiredIVs ) // if both parents combined don't have enough IVs, it is impossible to get the desired outcome
         return chanceofDesiredOutcome = 0
@@ -320,10 +319,9 @@ function calculate() {
             spreadsUsed = Object.values(spreadPossibilities.noDK)
             
     }
-    console.log(spreadsUsed)
+    // console.log(spreadsUsed)
     for ( let i=0; i<spreadsUsed.length; i++ ) {
-        spreadNumerator = 1;
-        spreadDenominator = spreadsUsed.length; // Amount of spreads that have a chance of generating desired outcome
+        decimalChance = 1/spreadsUsed.length
         
         for (let j=0; j<spreadsUsed[i].length;j++) {
             
@@ -334,20 +332,17 @@ function calculate() {
 
                 if ( parent1.item === parent2.item && parent1.stats[parent1.item] !== parent2.stats[parent2.item] && ( parent1.item === spreadsUsed[i][j] || parent2.item === spreadsUsed[i][j] ) && bothUsingPI ) { // if BOTH parents are holding the same PI but have different stats
                     
-                    spreadNumerator   *= 1;
-                    spreadDenominator *= 2;
+                    decimalChance *= 0.5 // 1/2
                 
                 } else if ( parent1.item !== parent2.item && parentItem === spreadsUsed[i][j] && bothUsingPI ) { // if BOTH parents have different PIs
                     
                     if ( parent.stats[parentItem] ) {
                         
-                        spreadNumerator   *= 1;
-                        spreadDenominator *= 1;
+                        decimalChance *= 1 // 1/1
 
                     } else {
                         
-                        spreadNumerator   *= 0;
-                        spreadDenominator *= 1;
+                        decimalChance *= 0 // 0/1
 
                     } 
                 
@@ -355,8 +350,7 @@ function calculate() {
                     
                     if ( desiredOutcome[spreadsUsed[i][j]] === parent1.stats[parent1.item] || desiredOutcome[spreadsUsed[i][j]] === parent2.stats[parent2.item] ) {
                         
-                        spreadNumerator   *= 1;
-                        spreadDenominator *= 1;
+                        decimalChance *= 1 // 1/1
 
                     } else {
 
@@ -366,18 +360,15 @@ function calculate() {
 
                 } else if ( parent1.stats[spreadsUsed[i][j]] && parent2.stats[spreadsUsed[i][j]] ) { // BOTH parents have the desired stat
                     
-                    spreadNumerator   *= 1;
-                    spreadDenominator *= 1;
+                    decimalChance *= 1 // 1/1
 
                 } else if ( parent1.stats[spreadsUsed[i][j]] || parent2.stats[spreadsUsed[i][j]] ) { // ONLY ONE parent has the desired stat
                     
-                    spreadNumerator   *= 1;
-                    spreadDenominator *= 2;
+                    decimalChance *= 0.5 // 1/2
 
                 } else {
                     
-                    spreadNumerator   *= 0;
-                    spreadDenominator *= 1;
+                    decimalChance *= 0 // 0/1
 
                 }
 
@@ -389,12 +380,11 @@ function calculate() {
 
         for (let k=0; k<remainingIVs.length; k++) {
             if ( desiredOutcome[remainingIVs[k]] ) { // the desired IV is not being inherited by parents
-                spreadNumerator   *= 1;
-                spreadDenominator *= 32;
+                decimalChance *= 0.03125 // 1/32
             }
         }
 
-        chanceofDesiredOutcome += (100/spreadDenominator)*spreadNumerator
+        chanceofDesiredOutcome += 100 * decimalChance
         
     }
 
